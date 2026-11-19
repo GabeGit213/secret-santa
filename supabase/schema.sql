@@ -101,15 +101,20 @@ values ('reset_pin_hash', extensions.crypt('CHANGE_ME', extensions.gen_salt('bf'
 
 create or replace function public.admin_reset(pin text)
 returns void language plpgsql security definer set search_path = public, extensions as $$
-declare h text;
+declare
+  stored_hash text;
 begin
-  select value into h from app_secrets where key = 'reset_pin_hash';
-  if h is null or crypt(pin, h) <> h then
-    raise exception 'wrong_pin';
+  select app_secrets.value
+    into stored_hash
+    from public.app_secrets
+   where app_secrets.key = 'reset_pin_hash';
+
+  if stored_hash is null or extensions.crypt(pin, stored_hash) <> stored_hash then
+    raise exception using message = 'wrong_pin';
   end if;
-  delete from assignments where true;
-  delete from participants where true;
-  update draw_state set status = 'open', drawn_at = null where id = 1;
+  delete from public.assignments where true;
+  delete from public.participants where true;
+  update public.draw_state set status = 'open', drawn_at = null where id = 1;
 end $$;
 
 revoke all on function public.admin_reset(text) from public, anon;
