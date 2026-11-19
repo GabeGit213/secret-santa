@@ -20,7 +20,8 @@ create unique index participants_name_unique on public.participants (lower(btrim
 create table public.draw_state (
   id int primary key default 1 check (id = 1),
   status text not null default 'open' check (status in ('open', 'drawn')),
-  drawn_at timestamptz
+  drawn_at timestamptz,
+  target_count int not null default 25 check (target_count between 3 and 100)
 );
 insert into public.draw_state (id) values (1);
 
@@ -53,7 +54,7 @@ create policy "participants insert own" on public.participants
   with check (
     id = auth.uid()
     and ready = false
-    and (select count(*) from public.participants) < 25
+    and (select count(*) from public.participants) < (select target_count from public.draw_state where id = 1)
     and exists (select 1 from public.draw_state where status = 'open')
   );
 
@@ -78,14 +79,17 @@ declare
   ids uuid[];
   n int;
   i int;
+  target_count int;
 begin
   perform 1 from draw_state where id = 1 and status = 'open' for update;
   if not found then return null; end if;
 
+  select target_count into target_count from draw_state where id = 1;
+
   select array_agg(id order by random()) into ids from participants;
   n := coalesce(cardinality(ids), 0);
 
-  if n <> 25 or exists (select 1 from participants where not ready) then
+  if n <> target_count or exists (select 1 from participants where not ready) then
     return null;
   end if;
 
@@ -123,5 +127,25 @@ end $$;
 
 revoke all on function public.admin_reset(text) from public, anon;
 grant execute on function public.admin_reset(text) to authenticated;
+
+create or replace function public.admin_set_target(pin text, target_count int)
+returns void language plpgsql security definer set search_path = public, extensions as $$
+begin
+  if not exists (
+    select 1
+    from public.app_secrets
+    where key = 'reset_pin_hash'
+      and extensions.crypt(pin, value) = value
+  ) then
+    raise exception using message = 'wrong_pin';
+  end if;
+  if target_count < 3 or target_count > 100 then
+    raise exception using message = 'invalid_target';
+  end if;
+  update public.draw_state set target_count = target_count where id = 1;
+end $$;
+
+revoke all on function public.admin_set_target(text, int) from public, anon;
+grant execute on function public.admin_set_target(text, int) to authenticated;
 
 alter publication supabase_realtime add table public.participants, public.draw_state;

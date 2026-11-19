@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { ro } from "../i18n/ro";
-import { adminReset } from "../lib/api";
+import { adminReset, setTargetCount } from "../lib/api";
 
 export function AdminPanel({ onReset }: { onReset: () => void }) {
   const [pin, setPin] = useState("");
   const [confirming, setConfirming] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [targetCount, setTargetCountValue] = useState("");
   const timer = useRef<number | undefined>(undefined);
 
   useEffect(() => () => window.clearTimeout(timer.current), []);
@@ -29,6 +30,22 @@ export function AdminPanel({ onReset }: { onReset: () => void }) {
     }
   }
 
+  async function saveTargetCount() {
+    const value = Number(targetCount);
+    if (!Number.isInteger(value) || value < 3 || value > 100) {
+      setError(ro.targetCountError);
+      return;
+    }
+    setError("");
+    setMessage("");
+    try {
+      await setTargetCount(pin, value);
+      setMessage(ro.targetCountSaved);
+    } catch (saveError) {
+      setError((saveError as { message?: string }).message?.includes("wrong_pin") ? ro.wrongPin : ro.errSaveFailed);
+    }
+  }
+
   return (
     <section className="card">
       <h2>{ro.adminTitle}</h2>
@@ -38,9 +55,16 @@ export function AdminPanel({ onReset }: { onReset: () => void }) {
       </div>
       {error && <p className="error" role="alert">{error}</p>}
       {message && <p role="status">{message}</p>}
-      <button className="button button-primary" type="button" onClick={() => void reset()}>
-        {confirming ? ro.resetConfirm : ro.reset}
-      </button>
+      <div className="field">
+        <label htmlFor="target-count">{ro.targetCountLabel}</label>
+        <input id="target-count" type="number" inputMode="numeric" min={3} max={100} value={targetCount} onChange={(event) => setTargetCountValue(event.target.value)} />
+      </div>
+      <div className="actions">
+        <button className="button button-primary" type="button" onClick={() => void saveTargetCount()}>{ro.targetCountSave}</button>
+        <button className="button button-secondary" type="button" onClick={() => void reset()}>
+          {confirming ? ro.resetConfirm : ro.reset}
+        </button>
+      </div>
     </section>
   );
 }

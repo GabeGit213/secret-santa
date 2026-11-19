@@ -18,7 +18,7 @@ export const ro = {
   reload: "Reîncarcă",
   loading: "Se încarcă…",
   readyCount: (ready: number, total: number) => `${ready} din ${total} sunt gata`,
-  needThree: "Sunt necesare exact 25 de persoane.",
+  needThree: (target: number) => `Sunt necesare exact ${target} de persoane.`,
   drawAutomatic: "Tragerea la sorți are loc automat când toți sunt gata.",
   imReady: "Sunt gata",
   edit: "Editează",
@@ -37,4 +37,9 @@ export const ro = {
   resetConfirm: "Apasă din nou pentru a șterge tot",
   wrongPin: "PIN greșit.",
   resetDone: "Totul a fost resetat.",
+  admin: "Admin",
+  targetCountLabel: "Câte persoane așteaptă tragerea?",
+  targetCountSave: "Salvează limita",
+  targetCountSaved: "Limita a fost salvată.",
+  targetCountError: "Alege între 3 și 100 persoane.",
 } as const;

@@ -10,16 +10,13 @@ import { useSantaState } from "./hooks/useSantaState";
 function App() {
   const state = useSantaState();
   const [editing, setEditing] = useState(false);
-
-  if (location.hash === "#admin") {
-    return <Layout><AdminPanel onReset={() => void state.refetch()} /></Layout>;
-  }
+  const [adminOpen, setAdminOpen] = useState(location.hash === "#admin");
 
   if (state.loading || !state.sessionReady) {
-    return <Layout><Message /></Layout>;
+    return <Layout onAdmin={() => setAdminOpen((open) => !open)} adminOpen={adminOpen}><Message />{adminOpen && <div className="admin-panel"><AdminPanel onReset={() => void state.refetch()} /></div>}</Layout>;
   }
   if (state.error) {
-    return <Layout><Message type="error" onReload={() => void state.refetch()} /></Layout>;
+    return <Layout onAdmin={() => setAdminOpen((open) => !open)} adminOpen={adminOpen}><Message type="error" onReload={() => void state.refetch()} />{adminOpen && <div className="admin-panel"><AdminPanel onReset={() => void state.refetch()} /></div>}</Layout>;
   }
 
   const me = state.participants.find((participant) => participant.id === state.userId);
@@ -44,13 +41,26 @@ function App() {
       <WaitingRoom
         participants={state.participants}
         userId={state.userId}
+        targetCount={state.drawState?.target_count ?? 25}
         onEdit={() => setEditing(true)}
         onChanged={() => void state.refetch()}
       />
     );
   }
 
-  return <Layout>{screen}</Layout>;
+  return (
+    <Layout
+      onAdmin={() => setAdminOpen((open) => !open)}
+      adminOpen={adminOpen}
+    >
+      {screen}
+      {adminOpen && (
+        <div className="admin-panel">
+          <AdminPanel onReset={() => void state.refetch()} />
+        </div>
+      )}
+    </Layout>
+  );
 }
 
 export default App;

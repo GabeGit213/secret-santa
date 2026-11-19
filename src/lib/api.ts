@@ -12,6 +12,7 @@ export type DrawState = {
   id: number;
   status: "open" | "drawn";
   drawn_at: string | null;
+  target_count: number;
 };
 
 export type Assignment = {
@@ -77,5 +78,10 @@ export async function markReady(id: string) {
 
 export async function adminReset(pin: string) {
   const { error } = await supabase.rpc("admin_reset", { pin });
+  if (error) throw error;
+}
+
+export async function setTargetCount(pin: string, targetCount: number) {
+  const { error } = await supabase.rpc("admin_set_target", { pin, target_count: targetCount });
   if (error) throw error;
 }

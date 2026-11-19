@@ -72,6 +72,22 @@ input, select {
 .error { color: #9e2028; }
 .message { text-align: center; }
 
+.admin-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--muted);
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.admin-panel { margin-top: 12px; }
+
 .reveal-button {
   position: relative;
   overflow: hidden;
