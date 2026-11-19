@@ -20,7 +20,7 @@ export function WaitingRoom({ participants, userId, targetCount, onEdit, onChang
   }
 
   return (
-    <section className="card">
+    <section className="card waiting-card">
       <p><strong>{ro.readyCount(readyCount, participants.length)}</strong></p>
       {participants.length < targetCount && <p>{ro.needThree(targetCount)}</p>}
       <ul aria-live="polite" style={{ listStyle: "none", padding: 0, margin: "16px 0", display: "grid", gap: 8 }}>

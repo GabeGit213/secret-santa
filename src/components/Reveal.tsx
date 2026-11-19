@@ -37,7 +37,7 @@ export function Reveal({ assignment, participants }: { assignment: Assignment; p
   }
 
   return (
-    <section className="card" style={{ textAlign: "center" }}>
+    <section className="card reveal-card" style={{ textAlign: "center" }}>
       <p>{ro.revealIntro}</p>
       {revealed ? (
         <h2 style={{ fontSize: 28, margin: "12px 0" }}>{receiver.name}</h2>

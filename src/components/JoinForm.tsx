@@ -50,7 +50,7 @@ export function JoinForm({ userId, participant, isEditing, onCancel, onSaved }: 
   }
 
   return (
-    <form className="card" onSubmit={submit}>
+    <form className="card join-card" onSubmit={submit}>
       <div className="field">
         <label htmlFor="name">{ro.nameLabel}</label>
         <input id="name" value={name} maxLength={40} placeholder={ro.namePlaceholder} onChange={(event) => setName(event.target.value)} />
