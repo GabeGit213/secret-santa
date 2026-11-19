@@ -19,6 +19,7 @@ export function Layout({ children, onAdmin, adminOpen = false }: { children: Rea
         <p>{ro.subtitle}</p>
       </header>
       {children}
+      <footer className="app-footer">{ro.madeBy}</footer>
     </main>
   );
 }

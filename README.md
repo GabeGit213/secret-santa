@@ -33,11 +33,11 @@ Fill both Vite environment variables in `.env`.
 
 ## Running it for the class
 
-Share the GitHub Pages link. Everyone joins and taps **Sunt gata**. When exactly 25 people are ready, Supabase creates the draw automatically.
+Share the GitHub Pages link. Everyone joins and taps **Sunt gata**. The host chooses the required participant count from the Admin panel.
 
 ## Starting over
 
-Open `<site-url>/#admin`, enter the PIN, then tap reset twice.
+Tap **Admin** in the top-right corner, enter the PIN, choose the participant limit or tap reset twice.
 
 ## Known limits
 
