@@ -11,12 +11,27 @@ function App() {
   const state = useSantaState();
   const [editing, setEditing] = useState(false);
   const [adminOpen, setAdminOpen] = useState(location.hash === "#admin");
+  const snowflakes = Array.from({ length: 24 }, (_, index) => (
+    <span
+      key={index}
+      className="snowflake"
+      style={{
+        left: `${(index * 37) % 100}%`,
+        animationDuration: `${9 + (index % 7)}s`,
+        animationDelay: `${-(index * 1.31)}s`,
+        fontSize: `${10 + (index % 4) * 3}px`,
+      }}
+      aria-hidden="true"
+    >
+      *
+    </span>
+  ));
 
   if (state.loading || !state.sessionReady) {
-    return <Layout onAdmin={() => setAdminOpen((open) => !open)} adminOpen={adminOpen}><Message />{adminOpen && <div className="admin-panel"><AdminPanel onReset={() => void state.refetch()} /></div>}</Layout>;
+    return <><div className="snow" aria-hidden="true">{snowflakes}</div><Layout onAdmin={() => setAdminOpen((open) => !open)} adminOpen={adminOpen}><Message />{adminOpen && <div className="admin-panel"><AdminPanel onReset={() => void state.refetch()} /></div>}</Layout></>;
   }
   if (state.error) {
-    return <Layout onAdmin={() => setAdminOpen((open) => !open)} adminOpen={adminOpen}><Message type="error" onReload={() => void state.refetch()} />{adminOpen && <div className="admin-panel"><AdminPanel onReset={() => void state.refetch()} /></div>}</Layout>;
+    return <><div className="snow" aria-hidden="true">{snowflakes}</div><Layout onAdmin={() => setAdminOpen((open) => !open)} adminOpen={adminOpen}><Message type="error" onReload={() => void state.refetch()} />{adminOpen && <div className="admin-panel"><AdminPanel onReset={() => void state.refetch()} /></div>}</Layout></>;
   }
 
   const me = state.participants.find((participant) => participant.id === state.userId);
@@ -49,17 +64,20 @@ function App() {
   }
 
   return (
-    <Layout
-      onAdmin={() => setAdminOpen((open) => !open)}
-      adminOpen={adminOpen}
-    >
-      {screen}
-      {adminOpen && (
-        <div className="admin-panel">
-          <AdminPanel onReset={() => void state.refetch()} />
-        </div>
-      )}
-    </Layout>
+    <>
+      <div className="snow" aria-hidden="true">{snowflakes}</div>
+      <Layout
+        onAdmin={() => setAdminOpen((open) => !open)}
+        adminOpen={adminOpen}
+      >
+        {screen}
+        {adminOpen && (
+          <div className="admin-panel">
+            <AdminPanel onReset={() => void state.refetch()} />
+          </div>
+        )}
+      </Layout>
+    </>
   );
 }
 

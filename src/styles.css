@@ -220,6 +220,37 @@ input[type="password"] {
   animation: reveal-progress 900ms linear forwards;
 }
 
+.snow {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.snowflake {
+  position: absolute;
+  top: -30px;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 3px rgba(76, 79, 92, 0.22);
+  animation-name: snowfall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translate3d(0, -30px, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(18px, 55dvh, 0) rotate(180deg);
+  }
+  100% {
+    transform: translate3d(-10px, calc(100dvh + 40px), 0) rotate(360deg);
+  }
+}
+
 @keyframes reveal-progress {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
@@ -266,4 +297,5 @@ input[type="password"] {
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+  .snow { display: none; }
 }
