@@ -8,6 +8,7 @@ export function Reveal({ assignment, participants }: { assignment: Assignment; p
   const [revealed, setRevealed] = useState(false);
   const [charging, setCharging] = useState(false);
   const timer = useRef<number | undefined>(undefined);
+  const completed = useRef(false);
 
   useEffect(() => {
     return () => window.clearTimeout(timer.current);
@@ -18,16 +19,19 @@ export function Reveal({ assignment, participants }: { assignment: Assignment; p
 
   function startCharge() {
     if (revealed) return;
+    completed.current = false;
     setCharging(true);
     if ("vibrate" in navigator) navigator.vibrate([30, 45, 30, 45, 30]);
     timer.current = window.setTimeout(() => {
       setCharging(false);
+      completed.current = true;
       setRevealed(true);
       if ("vibrate" in navigator) navigator.vibrate([80]);
     }, 900);
   }
 
   function cancelCharge() {
+    if (completed.current) return;
     window.clearTimeout(timer.current);
     setCharging(false);
   }
