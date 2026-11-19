@@ -62,3 +62,8 @@ end $$;
 
 revoke all on function public.admin_set_target(text, int) from public, anon;
 grant execute on function public.admin_set_target(text, int) to authenticated;
+
+-- Optional: set or replace the admin PIN. Replace BOTH quoted values with the same PIN.
+-- insert into public.app_secrets (key, value)
+-- values ('reset_pin_hash', extensions.crypt('YOUR-PIN', extensions.gen_salt('bf')))
+-- on conflict (key) do update set value = excluded.value;
