@@ -165,6 +165,36 @@ input[type="password"] {
   margin-bottom: 8px;
 }
 
+.join-card,
+.waiting-card,
+.reveal-card,
+.admin-panel .card {
+  color: #594638;
+}
+
+.join-card input,
+.join-card select,
+.waiting-card,
+.reveal-card,
+.admin-panel .card input,
+.admin-panel .card select {
+  color: #594638;
+}
+
+.join-card input::placeholder {
+  color: #806f5f;
+}
+
+.reveal-card h2,
+.waiting-card strong,
+.admin-panel .card h2 {
+  color: #6f3f32;
+}
+
+.button-secondary {
+  color: #a52d34;
+}
+
 .reveal-button {
   position: relative;
   overflow: hidden;
@@ -217,6 +247,22 @@ input[type="password"] {
     --shadow: 0 12px 34px rgba(0, 0, 0, 0.22);
   }
   .error { color: #ff9da2; }
+
+  .join-card,
+  .waiting-card,
+  .reveal-card,
+  .admin-panel .card {
+    color: #594638;
+  }
+
+  .join-card input,
+  .join-card select,
+  .waiting-card,
+  .reveal-card,
+  .admin-panel .card input,
+  .admin-panel .card select {
+    color: #594638;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
