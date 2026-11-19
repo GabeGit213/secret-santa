@@ -84,10 +84,23 @@ input, select {
   width: 100%;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.92);
+  background: #fffaf0;
   color: var(--text);
   padding: 11px 13px;
   box-shadow: inset 0 1px 3px rgba(82, 62, 42, 0.06);
+}
+
+input::placeholder,
+select:invalid {
+  color: #816f61;
+  opacity: 1;
+}
+
+input:focus,
+select:focus {
+  background: #fffdf7;
+  color: #3e2e25;
+  border-color: rgba(201, 50, 58, 0.55);
 }
 
 input[type="number"],
