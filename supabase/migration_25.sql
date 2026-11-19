@@ -24,7 +24,9 @@ begin
   perform 1 from draw_state where id = 1 and status = 'open' for update;
   if not found then return null; end if;
 
-  select target_count into target_count from draw_state where id = 1;
+  select ds.target_count into target_count
+  from public.draw_state ds
+  where ds.id = 1;
 
   select array_agg(id order by random()) into ids from participants;
   n := coalesce(cardinality(ids), 0);
@@ -55,7 +57,7 @@ begin
   if target_count < 3 or target_count > 100 then
     raise exception using message = 'invalid_target';
   end if;
-  update public.draw_state set target_count = target_count where id = 1;
+  update public.draw_state set target_count = $2 where id = 1;
 end $$;
 
 revoke all on function public.admin_set_target(text, int) from public, anon;
