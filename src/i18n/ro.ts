@@ -1,6 +1,6 @@
 export const ro = {
   appTitle: "Secret Santa",
-  subtitle: "Scrie-ți numele și ce îți place. Când toți sunt gata, fiecare primește pe cine să cumpere cadou.",
+  subtitle: "Scrie-ți numele și ce îți place. Când toți sunt gata, fiecare află cui să-i cumpere cadou.",
   nameLabel: "Numele tău",
   namePlaceholder: "ex. Maria Popescu",
   subjectsLabel: "Ce domenii îți plac? (2–3)",

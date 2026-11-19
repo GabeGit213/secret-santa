@@ -48,7 +48,7 @@ export async function loadApp(userId: string) {
   };
 }
 
-export async function upsertParticipant(participant: Participant) {
+export async function upsertParticipant(participant: { id: string; name: string; subjects: string[]; ready: false }) {
   const { error } = await supabase
     .from("participants")
     .upsert(participant, { onConflict: "id" });
