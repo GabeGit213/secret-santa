@@ -22,6 +22,13 @@ export type Assignment = {
 export async function getSession() {
   const { data, error } = await supabase.auth.getSession();
   if (error) throw error;
+  if (!data.session) return null;
+
+  const { error: userError } = await supabase.auth.getUser();
+  if (userError) {
+    await supabase.auth.signOut({ scope: "local" });
+    return null;
+  }
   return data.session;
 }
 
