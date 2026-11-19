@@ -40,6 +40,11 @@ alter table public.draw_state enable row level security;
 alter table public.assignments enable row level security;
 alter table public.app_secrets enable row level security;
 
+grant usage on schema public to authenticated;
+grant select, insert, update on public.participants to authenticated;
+grant select on public.draw_state to authenticated;
+grant select on public.assignments to authenticated;
+
 create policy "participants read" on public.participants
   for select to authenticated using (true);
 
