@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ro } from "../i18n/ro";
 import { subjects } from "../subjects";
 import type { Assignment, Participant } from "../lib/api";
@@ -6,29 +6,30 @@ import type { Assignment, Participant } from "../lib/api";
 export function Reveal({ assignment, participants }: { assignment: Assignment; participants: Participant[] }) {
   const receiver = participants.find((participant) => participant.id === assignment.receiver_id);
   const [revealed, setRevealed] = useState(false);
-  const [pressed, setPressed] = useState(false);
+  const [charging, setCharging] = useState(false);
+  const timer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
-    if (!pressed) return;
-    const release = () => setRevealed(false);
-    window.addEventListener("pointerup", release, { once: true });
-    window.addEventListener("pointercancel", release, { once: true });
-    return () => {
-      window.removeEventListener("pointerup", release);
-      window.removeEventListener("pointercancel", release);
-    };
-  }, [pressed]);
+    return () => window.clearTimeout(timer.current);
+  }, []);
 
   if (!receiver) return null;
   const labels = receiver.subjects.map((key) => subjects.find((subject) => subject.key === key)?.label).filter(Boolean);
 
-  function press() {
-    setPressed(true);
-    setRevealed(true);
+  function startCharge() {
+    if (revealed) return;
+    setCharging(true);
+    if ("vibrate" in navigator) navigator.vibrate([30, 45, 30, 45, 30]);
+    timer.current = window.setTimeout(() => {
+      setCharging(false);
+      setRevealed(true);
+      if ("vibrate" in navigator) navigator.vibrate([80]);
+    }, 900);
   }
-  function release() {
-    setPressed(false);
-    setRevealed(false);
+
+  function cancelCharge() {
+    window.clearTimeout(timer.current);
+    setCharging(false);
   }
 
   return (
@@ -38,16 +39,20 @@ export function Reveal({ assignment, participants }: { assignment: Assignment; p
         <h2 style={{ fontSize: 28, margin: "12px 0" }}>{receiver.name}</h2>
       ) : (
         <button
-          className="button button-secondary"
+          className={`button button-secondary reveal-button${charging ? " reveal-charging" : ""}`}
           type="button"
-          onPointerDown={press}
-          onPointerUp={release}
-          onPointerLeave={release}
-          onKeyDown={(event) => { if (event.key === " " || event.key === "Enter") press(); }}
-          onKeyUp={release}
-          onClick={(event) => {
-            if (event.detail === 0) setRevealed((value) => !value);
+          onPointerDown={(event) => {
+            event.currentTarget.setPointerCapture(event.pointerId);
+            startCharge();
           }}
+          onPointerUp={cancelCharge}
+          onPointerCancel={cancelCharge}
+          onLostPointerCapture={cancelCharge}
+          onKeyDown={(event) => {
+            if ((event.key === " " || event.key === "Enter") && !event.repeat) startCharge();
+          }}
+          onKeyUp={cancelCharge}
+          onContextMenu={(event) => event.preventDefault()}
         >
           {ro.holdToReveal}
         </button>

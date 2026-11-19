@@ -33,7 +33,7 @@ Fill both Vite environment variables in `.env`.
 
 ## Running it for the class
 
-Share the GitHub Pages link. Everyone joins and taps **Sunt gata**. When at least three people are ready, Supabase creates the draw automatically.
+Share the GitHub Pages link. Everyone joins and taps **Sunt gata**. When exactly 25 people are ready, Supabase creates the draw automatically.
 
 ## Starting over
 

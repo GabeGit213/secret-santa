@@ -53,6 +53,7 @@ create policy "participants insert own" on public.participants
   with check (
     id = auth.uid()
     and ready = false
+    and (select count(*) from public.participants) < 25
     and exists (select 1 from public.draw_state where status = 'open')
   );
 
@@ -84,7 +85,7 @@ begin
   select array_agg(id order by random()) into ids from participants;
   n := coalesce(cardinality(ids), 0);
 
-  if n < 3 or exists (select 1 from participants where not ready) then
+  if n <> 25 or exists (select 1 from participants where not ready) then
     return null;
   end if;
 

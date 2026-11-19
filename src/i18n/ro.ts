@@ -18,7 +18,7 @@ export const ro = {
   reload: "Reîncarcă",
   loading: "Se încarcă…",
   readyCount: (ready: number, total: number) => `${ready} din ${total} sunt gata`,
-  needThree: "Sunt necesare cel puțin 3 persoane.",
+  needThree: "Sunt necesare exact 25 de persoane.",
   drawAutomatic: "Tragerea la sorți are loc automat când toți sunt gata.",
   imReady: "Sunt gata",
   edit: "Editează",

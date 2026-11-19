@@ -71,6 +71,43 @@ input, select {
 .actions { display: grid; gap: 10px; margin-top: 16px; }
 .error { color: #9e2028; }
 .message { text-align: center; }
+
+.reveal-button {
+  position: relative;
+  overflow: hidden;
+  transition: transform 900ms cubic-bezier(.2,.8,.2,1), background 300ms ease, color 300ms ease;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.reveal-button.reveal-charging {
+  transform: scale(1.12);
+  background: var(--accent);
+  color: #fff;
+  animation: reveal-shake 160ms linear infinite;
+}
+
+.reveal-button.reveal-charging::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,.18);
+  transform-origin: left;
+  animation: reveal-progress 900ms linear forwards;
+}
+
+@keyframes reveal-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes reveal-shake {
+  0%, 100% { margin-left: 0; }
+  25% { margin-left: -2px; }
+  75% { margin-left: 2px; }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: #fff7f2;

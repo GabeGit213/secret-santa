@@ -21,7 +21,7 @@ export function WaitingRoom({ participants, userId, onEdit, onChanged }: Props) 
   return (
     <section className="card">
       <p><strong>{ro.readyCount(readyCount, participants.length)}</strong></p>
-      {participants.length < 3 && <p>{ro.needThree}</p>}
+      {participants.length < 25 && <p>{ro.needThree}</p>}
       <ul aria-live="polite" style={{ listStyle: "none", padding: 0, margin: "16px 0", display: "grid", gap: 8 }}>
         {participants.map((participant) => (
           <li key={participant.id} style={{ display: "flex", justifyContent: "space-between", gap: 10, padding: "10px 12px", border: "1px solid var(--border)", borderRadius: 12 }}>
