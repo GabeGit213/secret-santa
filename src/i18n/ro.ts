@@ -42,5 +42,5 @@ export const ro = {
   targetCountSave: "Salvează limita",
   targetCountSaved: "Limita a fost salvată.",
   targetCountError: "Alege între 3 și 100 persoane.",
-  madeBy: "Făcut cu 💗 de Gabe",
+  madeBy: "made with 💗by gabe",
 } as const;
